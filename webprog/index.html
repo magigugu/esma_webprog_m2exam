@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <title><h1>LATE EMPLOYEE ATTENDANCE MANAGEMENT</h1></title>
+</head>
+<body>
+    <h2><p>
+        THIS IS A SITE TO MONITOR EMPLOYEES ONCE THEY HAVE TIMED INTO WORK <br>
+        AND SHOW IF THEY HAVE ENTERED INTO WORK LATE.</br>
+    </p></h2>
+
+    <div class="login-container"></div>
+        <form id="login-form">
+            <div class="input-group">
+                <label for="Employee_NAME">Username:</label>
+                <input type="text" id="Employee_NAME" name="Employee_NAME" placeholder="NAME" required>
+            </div>
+            <div class="input-group">
+                <label for="Employee_ID">Password:</label>
+                <input type="int" id="Employee_ID" name="Employee_ID" placeholder="ID" required>
+            </div>
+            <div class=" attendance">
+                <label for="Employee_TIME_IN">Time in:</label>
+                <input type="time" id="Employee_TIME_IN" name="Employee_TIME_IN"><br></br>
+                <p>"press "1" for am and "2" for pm"</p>
+            </div>
+            <button type="button"  onclick="submitFunc()">Sign In</button>
+        </form>
+    </div>
+
+    <script>
+       async function submitFunc() {
+            const formData = new FormData();
+            formData.append("Employee_ID", document.getElementById("Employee_ID").value);
+            formData.append("Employee_NAME", document.getElementById("Employee_NAME").value);
+            formData.append("Employee_TIME_IN", document.getElementById("Employee_TIME_IN").value);
+
+            //const formData = new FormData(this);
+            console.log(formData);
+
+            let response = await fetch("/webprog/user.php", {
+            method: "POST",
+            body: formData });
+            let data_text = await response.text();
+            console.log(data_text)
+            let data = JSON.parse(data_text)
+            if (data.success) {
+                if (data.message) {
+                    window.alert(`Welcome employee! ${data.message}`);
+                } else {
+                    window.alert("Welcome employee!")
+                }
+            }
+            else {
+                window.alert(`Error: ${data.message}`);
+            }
+            //.catch(error => console.error("Fetch Error:", error));
+        }
+    </script>
+</body>
+</html>
